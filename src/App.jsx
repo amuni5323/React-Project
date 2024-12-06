@@ -18,6 +18,8 @@ const App = () => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
   const [sortBy, setSortBy] = useState("title");
+  const [showConfirmDecline, setShowConfirmDecline] = useState(false);
+  const [movieToDecline, setMovieToDecline] = useState(null);
 
   const API_KEY = "6d0c3c51d69892c62a89b04192c07ace";
 
@@ -48,8 +50,22 @@ const App = () => {
   };
 
   const declineMovie = (id) => {
-    setDeclinedMovies((prev) => [...prev, id]);
+    setMovieToDecline(id); // Set the movie to be declined
+    setShowConfirmDecline(true); // Show the confirmation modal
   };
+  
+  const confirmDecline = () => {
+    // Add the movie to the declined list and close the modal
+    setDeclinedMovies((prev) => [...prev, movieToDecline]);
+    setShowConfirmDecline(false);
+    setMovieToDecline(null); // Reset movie to decline
+  };
+  
+  const cancelDecline = () => {
+    setShowConfirmDecline(false);
+    setMovieToDecline(null); // Reset movie to decline
+  };
+  
 
   const toggleFavorite = (id) => {
     setFavorites((prev) =>
@@ -123,16 +139,14 @@ const App = () => {
   const handleImageClick = (id, tmdbUrl, youtubeUrl) => {
     setClickCount((prev) => {
       const newClickCount = { ...prev, [id]: (prev[id] || 0) + 1 };
-      if (newClickCount[id] === 1) {
-        window.open(tmdbUrl, "_blank"); 
-      } else if (newClickCount[id] === 2) {
-        window.open(youtubeUrl, "_blank"); 
-        newClickCount[id] = 0; 
-      }
+      newClickCount[id] === 1
+        ? window.open(tmdbUrl, "_blank")
+        : newClickCount[id] === 2
+        ? (window.open(youtubeUrl, "_blank"), (newClickCount[id] = 0))
+        : null;
       return newClickCount;
-    });
+    });
   };
-
   return (
     <Router>
       <div className={`container-fluid ${darkMode ? "bg-dark text-white" : "bg-light"}`} style={{ minHeight: "100vh", padding: "20px" }}>
@@ -218,7 +232,20 @@ const App = () => {
                     <button onClick={() => declineMovie(movie.id)} className="btn btn-danger me-2 mt-2">
                       Decline
                     </button>
-                    <button
+                    {showConfirmDecline && movieToDecline === movie.id && (
+    <div className="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center text-white" style={{ zIndex: 2 }}>
+        <div className="text-center bg-dark p-4 rounded">
+            <h4>Are you sure you want to decline this movie?</h4>
+            <button onClick={confirmDecline} className="btn btn-danger me-2">Yes</button>
+            <button onClick={cancelDecline} className="btn btn-secondary">No</button>
+        </div>
+    </div>
+)}
+
+{/* <button onClick={() => declineMovie(movie.id)} className="btn btn-danger me-2 mt-2">
+    <i className="bi bi-trash"></i> 
+</button> */}
+ <button
                       onClick={() => toggleFavorite(movie.id)}
                       className={`btn ${favorites.includes(movie.id) ? "btn-warning" : "btn-outline-warning"} me-2 mt-2`}
                     >
