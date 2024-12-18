@@ -50,20 +50,20 @@ const App = () => {
   };
 
   const declineMovie = (id) => {
-    setMovieToDecline(id); // Set the movie to be declined
-    setShowConfirmDecline(true); // Show the confirmation modal
+    setMovieToDecline(id); 
+    setShowConfirmDecline(true); 
   };
   
   const confirmDecline = () => {
-    // Add the movie to the declined list and close the modal
+   
     setDeclinedMovies((prev) => [...prev, movieToDecline]);
     setShowConfirmDecline(false);
-    setMovieToDecline(null); // Reset movie to decline
+    setMovieToDecline(null); 
   };
   
   const cancelDecline = () => {
     setShowConfirmDecline(false);
-    setMovieToDecline(null); // Reset movie to decline
+    setMovieToDecline(null); 
   };
   
 
@@ -242,9 +242,7 @@ const App = () => {
     </div>
 )}
 
-{/* <button onClick={() => declineMovie(movie.id)} className="btn btn-danger me-2 mt-2">
-    <i className="bi bi-trash"></i> 
-</button> */}
+
  <button
                       onClick={() => toggleFavorite(movie.id)}
                       className={`btn ${favorites.includes(movie.id) ? "btn-warning" : "btn-outline-warning"} me-2 mt-2`}
