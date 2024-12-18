@@ -151,7 +151,7 @@ const App = () => {
     <Router>
       <div className={`container-fluid ${darkMode ? "bg-dark text-white" : "bg-light"}`} style={{ minHeight: "100vh", padding: "20px" }}>
         <h1 className="my-4">Popular Movies</h1>
-        <button className="btn btn-secondary mb-4" onClick={toggleDarkMode}>
+        <button className="btn btn-secondary mb-4" onClick={toggleDarkMode} >
           Toggle Dark Mode
         </button>
 
